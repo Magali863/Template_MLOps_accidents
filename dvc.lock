@@ -1,0 +1,53 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 90c3e04bb8fa1558eb70f9096b5b6010.dir
+      size: 31082914
+      nfiles: 4
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 2e53f79093214deacec8877e9de94be8
+      size: 8728
+    outs:
+    - path: data/preprocessed
+      hash: md5
+      md5: 4c592b1e9fef5b7e9c169ab84388537f.dir
+      size: 5341571
+      nfiles: 4
+  train:
+    cmd: python src/models/train_model.py
+    deps:
+    - path: data/preprocessed
+      hash: md5
+      md5: 4c592b1e9fef5b7e9c169ab84388537f.dir
+      size: 5341571
+      nfiles: 4
+    - path: src/models/train_model.py
+      hash: md5
+      md5: 25fb463a04b14b8b35df61892ff37e1f
+      size: 691
+    outs:
+    - path: models/trained_model.joblib
+      hash: md5
+      md5: 5fe7c0ff74401023fc0f46f5de688b5d
+      size: 97017561
+  evaluation:
+    cmd: python src/models/evaluate_model.py
+    deps:
+    - path: models/trained_model.joblib
+      hash: md5
+      md5: 5fe7c0ff74401023fc0f46f5de688b5d
+      size: 97017561
+    - path: src/models/evaluate_model.py
+      hash: md5
+      md5: 65d1f5754404f287ba753d7a6e2d59af
+      size: 831
+    outs:
+    - path: metrics/accuracy.json
+      hash: md5
+      md5: c3d69d9538d448768d76d850800a4cf0
+      size: 32
